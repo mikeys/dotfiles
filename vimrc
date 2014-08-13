@@ -1,20 +1,21 @@
+" Use vim settings, rather then vi settings
 set nocompatible
 
 " Vundle Settings
 " ===============
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
+filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" let Vundle manage Vundle, required
+" let Vundle manage Vundle
 Plugin 'gmarik/Vundle.vim'
 
 " plugins
 Plugin 'scrooloose/nerdtree.git'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'kien/ctrlp.vim'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'vim-ruby/vim-ruby'
 
 call vundle#end()            " required
 
@@ -32,9 +33,6 @@ let maplocalleader="\\"
 " enable copy/paste to clipboard
 set clipboard=unnamed
 
-" recognize filetype of files you open
-filetype plugin on
-
 " syntax highlighting
 syntax on
 
@@ -43,8 +41,9 @@ set noeol
 set binary
 
 " presentation settings
+colorscheme grb256
 set number              " precede each line with its line number
-set numberwidth=3       " number of culumns for line numbers
+set numberwidth=5       " number of culumns for line numbers
 set textwidth=0         " Do not wrap words (insert)
 set nowrap              " Do not wrap words (view)
 set showcmd             " Show (partial) command in status line.
@@ -52,9 +51,9 @@ set showmatch           " Show matching brackets.
 
 " indentation
 set autoindent 		" automatically indents new line
-set ts=4	        " number of spaces in a tab
-set sw=4	        " number of spaces for indent
-set et 		        " expand tabs into spaces
+set tabstop=2	    " number of spaces in a tab
+set shiftwidth=2	" number of spaces for indent
+set expandtab 		" expand tabs into spaces
 
 " search setings
 set incsearch       " Incremental search
@@ -103,7 +102,18 @@ let g:ctrlp_max_height = 40
 let g:ctrlp_switch_buffer = 1
 
 " if in git repo - use git file listing command, should be faster
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files --exclude-standard -cod']
+if executable('ag')
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+else
+  let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files --exclude-standard -cod']
+endif
 
 " open multiple files with <c-z> to mark and <c-o> to open. v - opening in
 " vertical splits; j - jump to first open buffer; r - open first in current buffer
