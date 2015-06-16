@@ -13,15 +13,27 @@ Plugin 'gmarik/Vundle.vim'
 " plugins
 Plugin 'scrooloose/nerdtree.git'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'kien/ctrlp.vim'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-ruby/vim-ruby'
+Plugin 'scrooloose/syntastic'
+Plugin 'bling/vim-airline'
+Plugin 'fatih/vim-go'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'tacahiroy/ctrlp-funky'
+Plugin 'Chiel92/vim-autoformat'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'majutsushi/tagbar'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'rking/ag.vim'
+Plugin 'Yggdroot/indentLine'
+Plugin 'tpope/vim-fugitive'
 
 call vundle#end()            " required
 
 " recognize filetype of files you open (required)
 filetype plugin indent on
-
+filetype plugin on
 
 " Misc Settings
 " ==================
@@ -41,26 +53,31 @@ set noeol
 set binary
 
 " presentation settings
+set background=dark
 colorscheme grb256
-set number              " precede each line with its line number
-set numberwidth=5       " number of culumns for line numbers
-set textwidth=0         " Do not wrap words (insert)
-set nowrap              " Do not wrap words (view)
-set showcmd             " Show (partial) command in status line.
-set showmatch           " Show matching brackets.
+
+set number           " precede each line with its line number
+set numberwidth=5    " number of culumns for line numbers
+set textwidth=0      " Do not wrap words (insert)
+set nowrap           " Do not wrap words (view)
+set showcmd          " Show (partial) command in status line.
+set showmatch        " Show matching brackets.
+set laststatus=2
 
 " indentation
-set autoindent 		" automatically indents new line
-set tabstop=2	    " number of spaces in a tab
-set shiftwidth=2	" number of spaces for indent
-set expandtab 		" expand tabs into spaces
+set autoindent       " automatically indents new line
+set tabstop=2        " number of spaces in a tab
+set shiftwidth=2     " number of spaces for indent
+set expandtab        " expand tabs into spaces
 
 " search setings
-set incsearch       " Incremental search
-set hlsearch        " Highlight search match
-set ignorecase      " Do case insensitive matching
-set smartcase       " do not ignore if search pattern has CAPS
+set incsearch        " Incremental search
+set hlsearch         " Highlight search match
+set ignorecase       " Do case insensitive matching
+set smartcase        " do not ignore if search pattern has CAPS
 
+" backspace
+set backspace=indent,eol,start
 
 " Plugin Settings
 " ==================
@@ -73,9 +90,9 @@ nmap <C-P> :NERDTreeToggle<CR>
 nmap <leader>p :NERDTreeFind<CR>
 
 """ NERDCommenter
-let NERDCreateDefaultMappings=0 " disable default mappings
-let NERDSpaceDelims=2           " place spaces after comment chars
-let NERDDefaultNesting=0        " don't recomment commented lines
+let NERDCreateDefaultMappings=0  " disable default mappings
+let NERDSpaceDelims=2            " place spaces after comment chars
+let NERDDefaultNesting=0         " don't recomment commented lines
 
 " ,/ to invert comment on the current line/selection
 nmap <leader>/ <Plug>NERDCommenterToggle
@@ -120,3 +137,71 @@ endif
 let g:ctrlp_open_multiple_files = 'vjr'
 
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'mixed', 'line']"
+
+""" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+""" vim-go
+" Disable opening browser after posting to your snippet to play.golang.org:
+let g:go_play_open_browser = 0
+
+" Enable goimports to automatically insert import paths instead of gofmt:
+let g:go_fmt_command = "goimports"
+
+" By default syntax-highlighting for Functions, Methods and Structs is disabled. To change it:
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+
+""" CtrlP-Funky
+nnoremap <Leader>fu :CtrlPFunky<Cr>
+" narrow the list down with a word under cursor
+nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+let g:ctrlp_funky_syntax_highlight = 1
+
+""" vim-autoformat
+noremap <F3> :Autoformat<CR><CR>
+
+""" tagbar
+nmap <F8> :TagbarToggle<CR>
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'    : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+
+""" vim-airline
+let g:airline_powerline_fonts = 1
+let g:airline_theme =  'wombat'
+"let g:airline#extensions#tabline#enabled = 1
