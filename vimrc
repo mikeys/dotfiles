@@ -28,7 +28,8 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'rking/ag.vim'
 Plugin 'Yggdroot/indentLine'
 Plugin 'tpope/vim-fugitive'
-
+Plugin 'markcornick/vim-terraform'
+Plugin 'mxw/vim-jsx'
 call vundle#end()            " required
 
 " recognize filetype of files you open (required)
@@ -79,12 +80,16 @@ set smartcase        " do not ignore if search pattern has CAPS
 " backspace
 set backspace=indent,eol,start
 
+" cycle through buffers
+nnoremap <C-n> :bnext<CR>
+nnoremap <C-p> :bprevious<CR>
+
 " Plugin Settings
 " ==================
 
 """ NERDTree
-" Ctrl-P to display the file browser tree
-nmap <C-P> :NERDTreeToggle<CR>
+" Ctrl-k to display the file browser tree
+nnoremap <C-k><C-b> :NERDTreeToggle<CR>
 
 " ,p to show current file in the tree
 nmap <leader>p :NERDTreeFind<CR>
@@ -204,4 +209,4 @@ let g:tagbar_type_go = {
 """ vim-airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme =  'wombat'
-"let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
