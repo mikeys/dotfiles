@@ -1,38 +1,45 @@
 # Antigen
 # =======
 
-source $HOME/.antigen/antigen.zsh
-antigen use oh-my-zsh
+# source $HOME/.antigen/antigen.zsh
+# antigen use oh-my-zsh
 
 # Bundles from the default repo (robbyrussell's oh-my-zsh)
-antigen bundle brew
-antigen bundle brew-cask
-antigen bundle bundler
-antigen bundle command-not-found    # requires 'brew tap homebrew/command-not-found'
-antigen bundle docker
-antigen bundle docker-compose
-antigen bundle heroku
-antigen bundle git
-antigen bundle node
-antigen bundle npm
-antigen bundle node
-antigen bundle nvm
-antigen bundle gem
-antigen bundle osx
-antigen bundle rails
-antigen bundle ruby
-antigen bundle rvm
+# antigen bundle brew
+# antigen bundle brew-cask
+# antigen bundle bundler
+# antigen bundle command-not-found    # requires 'brew tap homebrew/command-not-found'
+# antigen bundle docker
+# antigen bundle docker-compose
+# antigen bundle heroku
+# antigen bundle git
+# antigen bundle node
+# antigen bundle npm
+# antigen bundle node
+# antigen bundle nvm
+# antigen bundle gem
+# antigen bundle osx
+# antigen bundle rails
+# antigen bundle ruby
+# antigen bundle rvm
 
 # Bundles from non-default repos
-antigen bundle unixorn/docker-helpers.zshplugin
-antigen bundle zsh-users/zsh-syntax-highlighting
+# antigen bundle unixorn/docker-helpers.zshplugin
+# antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Custom theme
-antigen theme $HOME/dotfiles/ steeef_custom.zsh-theme
+# antigen theme $HOME/dotfiles/ steeef_custom.zsh-theme
 
 # Tell antigen that you're done.
-antigen apply
+# antigen apply
 
+export ZSH=$HOME/.oh-my-zsh
+
+ZSH_THEME="steeef_custom"		
+		
+plugins=(brew bundler docker docker-compose heroku git npm node gem osx rails ruby rvm)		
+		
+source $ZSH/oh-my-zsh.sh
 
 # User configuration
 # ==================
@@ -44,8 +51,8 @@ export TERM=xterm-256color
 export PATH=$PATH:/usr/local/bin:/usr/local/opt:/usr/bin:/bin:/usr/sbin:/sbin
 
 # Unbreak annoying UTF-8 issues
-export LC_ALL="en_US.UTF-8"
-export LANG="en_US.UTF-8"
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Unbreak history
 export HISTSIZE=100000
@@ -74,7 +81,7 @@ export PIP_REQUIRE_VIRTUALENV=true
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 
 # Docker Machine
-eval "$(docker-machine env default)"
+# eval "$(docker-machine env default)"
 
 # added by travis gem
 [ -f /Users/mikey/.travis/travis.sh ] && source /Users/mikey/.travis/travis.sh
