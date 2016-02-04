@@ -44,40 +44,39 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 # ==================
 
-# Enable 256 color support
+# enable 256 color support
 export TERM=xterm-256color
 
-# The most annoying environment variable ever
+# the most annoying environment variable ever
 export PATH=$PATH:/usr/local/bin:/usr/local/opt:/usr/bin:/bin:/usr/sbin:/sbin
 
-# Unbreak annoying UTF-8 issues
+export DEVDIR=$HOME/Development
+
+# unbreak utf-8 issues
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# Unbreak history
+# history
 export HISTSIZE=100000
 export HISTFILE=$HOME/.history
 export SAVEHIST=$HISTSIZE # This will save history for next sessions
 
 export EDITOR=vim
 
-# RVM
+# rvm
 export PATH=$PATH:$HOME/.rvm/bin
 
-# NVM
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
+# nvm
+export NVM_DIR=$HOME/.nvm
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" --no-use
 
-# GVM
+# gvm
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 
-# Android NDK
-export NDK=$HOME/Development/android/android-ndk-r9d
-
-# Python
 # pip should only run if there is a virtualenv currently activated
 export PIP_REQUIRE_VIRTUALENV=true
-# cache pip-installed packages to avoid re-downloading
+
+# pip cache packages to avoid re-downloading
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 
 # Docker Machine
@@ -86,13 +85,13 @@ export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 # added by travis gem
 [ -f /Users/mikey/.travis/travis.sh ] && source /Users/mikey/.travis/travis.sh
 
-# Modifies PATH to include gcloud.
+# gcloud path
 source /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 
-# The next line enables zsh auto-completion for gcloud.
+# gcloud autocomplete
 source /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 
-# The next line enables zsh auto-completion for awscli.
+# awscli autocomplete
 source /usr/local/share/zsh/site-functions/_aws
 
 
