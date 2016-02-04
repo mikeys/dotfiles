@@ -79,10 +79,10 @@ export PIP_REQUIRE_VIRTUALENV=true
 # pip cache packages to avoid re-downloading
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 
-# Docker Machine
-# eval "$(docker-machine env default)"
+# docker
+eval "$(docker-machine env default)"
 
-# added by travis gem
+# travis ci
 [ -f /Users/mikey/.travis/travis.sh ] && source /Users/mikey/.travis/travis.sh
 
 # gcloud path
