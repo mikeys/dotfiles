@@ -8,10 +8,9 @@ antigen use oh-my-zsh
 antigen bundle brew
 antigen bundle brew-cask
 antigen bundle bundler
-antigen bundle command-not-found
+antigen bundle command-not-found    # requires 'brew tap homebrew/command-not-found'
 antigen bundle docker
 antigen bundle docker-compose
-antigen bundle unixorn/docker-helpers.zshplugin
 antigen bundle heroku
 antigen bundle git
 antigen bundle node
@@ -23,6 +22,9 @@ antigen bundle osx
 antigen bundle rails
 antigen bundle ruby
 antigen bundle rvm
+
+# Bundles from non-default repos
+antigen bundle unixorn/docker-helpers.zshplugin
 antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Custom theme
