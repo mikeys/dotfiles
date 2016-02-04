@@ -3,34 +3,38 @@ set nocompatible
 
 " Vundle Settings
 " ===============
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call plug#begin('~/.vim/plugged')
 
-" let Vundle manage Vundle
-Plugin 'gmarik/Vundle.vim'
+" Make sure you use single quotes
 
-" plugins
-Plugin 'scrooloose/nerdtree.git'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'scrooloose/syntastic'
-Plugin 'bling/vim-airline'
-Plugin 'fatih/vim-go'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'tacahiroy/ctrlp-funky'
-Plugin 'Chiel92/vim-autoformat'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'majutsushi/tagbar'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'rking/ag.vim'
-Plugin 'Yggdroot/indentLine'
-Plugin 'tpope/vim-fugitive'
-Plugin 'markcornick/vim-terraform'
-Plugin 'mxw/vim-jsx'
-call vundle#end()            " required
+Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'rking/ag.vim'
+Plug 'Chiel92/vim-autoformat'
+Plug 'jiangmiao/auto-pairs'
+Plug 'flazz/vim-colorschemes'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'fatih/vim-go'
+Plug 'Yggdroot/indentLine'
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'vim-ruby/vim-ruby'
+Plug 'scrooloose/syntastic'
+Plug 'majutsushi/tagbar'
+Plug 'tmux-plugins/vim-tmux'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+
+" JS Plugins
+Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+Plug 'pangloss/vim-javascript'
+Plug 'millermedeiros/vim-esformatter'
+Plug 'mxw/vim-jsx'
+
+" Add plugins to &runtimepath
+call plug#end()
 
 " recognize filetype of files you open (required)
 filetype plugin indent on
@@ -166,12 +170,6 @@ let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
-
-""" CtrlP-Funky
-nnoremap <Leader>fu :CtrlPFunky<Cr>
-" narrow the list down with a word under cursor
-nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
-let g:ctrlp_funky_syntax_highlight = 1
 
 """ vim-autoformat
 noremap <F3> :Autoformat<CR><CR>
