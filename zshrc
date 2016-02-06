@@ -35,17 +35,19 @@
 
 export ZSH=$HOME/.oh-my-zsh
 
-ZSH_THEME="steeef_custom"		
-		
-plugins=(brew bundler docker docker-compose heroku git npm node gem osx rails ruby rvm)		
-		
+ZSH_THEME="steeef_custom"
+
+plugins=(brew bundler docker docker-compose heroku git npm node gem osx rails ruby rvm)
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 # ==================
 
 # enable 256 color support
-export TERM=xterm-256color
+if [ "$TERM" = "xterm" ]; then
+	export TERM=xterm-256color
+fi
 
 # the most annoying environment variable ever
 export PATH=$PATH:/usr/local/bin:/usr/local/opt:/usr/bin:/bin:/usr/sbin:/sbin
@@ -86,16 +88,16 @@ eval "$(docker-machine env default)"
 [ -f /Users/mikey/.travis/travis.sh ] && source /Users/mikey/.travis/travis.sh
 
 # gcloud path
-source /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
+# source /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 
 # gcloud autocomplete
-source /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
+# source /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 
 # awscli autocomplete
-source /usr/local/share/zsh/site-functions/_aws
+# source /usr/local/share/zsh/site-functions/_aws
 
 
 # Aliases
 # =======
-
+alias ctags="$(brew --prefix)/bin/ctags"
 alias dev='cd $HOME/Development'
