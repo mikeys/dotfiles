@@ -128,22 +128,17 @@ autocmd BufWinLeave * call clearmatches()
 " Text, tab and indent related
 " ============================
 
-" Use spaces instead of tabs
-set expandtab
-
-" Be smart when using tabs ;)
-set smarttab
-
-" 1 tab == 4 spaces
-set tabstop=4        " number of spaces in a tab
-set shiftwidth=4     " number of spaces for indent
+set expandtab 	" Use spaces instead of tabs
+set smarttab 	" Be smart when using tabs ;)
+set tabstop=4	" number of spaces in a tab
+set shiftwidth=4 " number of spaces for indent
 
 " Linebreak on 500 characters
 set linebreak
 set textwidth=500
 
-set autoindent       " Automatically indents new line
-set nowrap           " Do not wrap words (view)
+set autoindent 	" Automatically indents new line
+set nowrap		" Do not wrap words (view)
 
 " Prevent vim from adding empty line at the end of every file
 set noeol
@@ -201,36 +196,14 @@ noremap <F3> :Autoformat<CR><CR>
 """ ctrlp
 let g:ctrlp_map = '<leader>,'
 let g:ctrlp_cmd = 'CtrlP'
-
-nmap <leader>. :CtrlPClearCache<cr>:CtrlP<cr>
-nmap <leader>m :CtrlPBufTag<cr>
-nmap <leader>M :CtrlPBufTagAll<cr>
-" nmap <leader>l :CtrlPLine<cr>
-" nmap <leader>b :CtrlPBuff<cr>
-
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = {
+     \ 'dir':  '_build$\|deps$\|\.git$\|\.hg$\|\.svn$\|log$\|_public$\|node_modules$\|bower_components$\|tmp$\|vendor/bundle$\|vendor/cache$\|coverage$\|vendor/mongodb$\|vendor/redis$',
+     \ 'file': '\.swp$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
+     \ }
 let g:ctrlp_clear_cache_on_exit = 1
-" ctrlp leaves stale caches behind if there is another vim process runnin
-" which didn't use ctrlp. so we clear all caches on each new vim invocation
-cal ctrlp#clra()
-
 let g:ctrlp_max_height = 10
-
-" jump to buffer in the same tab if already open
-let g:ctrlp_switch_buffer = 1
-
-" if in git repo - use git file listing command, should be faster
-if executable('ag')
-  " Use Ag over Grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-else
-  let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files --exclude-standard -cod']
-endif
+let g:ctrlp_switch_buffer = 1 " jump to buffer in the same tab if already open
 
 " open multiple files with <c-z> to mark and <c-o> to open. v - opening in
 " vertical splits; j - jump to first open buffer; r - open first in current buffer
@@ -238,16 +211,33 @@ let g:ctrlp_open_multiple_files = 'vjr'
 
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'mixed', 'line']"
 
+" ctrlp leaves stale caches behind if there is another vim process runnin
+" which didn't use ctrlp. so we clear all caches on each new vim invocation
+cal ctrlp#clra()
+
+" Use Ag over Grep
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+nmap <leader>. :CtrlPClearCache<cr>:CtrlP<cr>
+nmap <leader>m :CtrlPBufTag<cr>
+nmap <leader>M :CtrlPBufTagAll<cr>
+" nmap <leader>l :CtrlPLine<cr>
+" nmap <leader>b :CtrlPBuff<cr>
+
 
 """ ctrlp-funky
-" syntax highlighting on funky matches
-let g:ctrlp_funky_syntax_highlight = 1
-
-" matched chars highlighting
-let g:ctrlp_funky_matchtype = 'path'
+let g:ctrlp_funky_syntax_highlight = 1 	" syntax highlighting on funky matches
+let g:ctrlp_funky_matchtype = 'path' 	" matched chars highlighting
 
 noremap <Leader>fu :CtrlPFunky<Cr>
-
 " narrow the list down with a word under cursor
 nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>nn
 
