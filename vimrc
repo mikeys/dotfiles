@@ -111,6 +111,7 @@ syntax on " Enable syntax highlighting
 
 set t_Co=256
 set background=dark
+let g:hybrid_custom_term_colors = 1
 colorscheme hybrid
 
 set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard language
