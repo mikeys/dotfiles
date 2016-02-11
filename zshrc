@@ -66,7 +66,7 @@ export SAVEHIST=$HISTSIZE # This will save history for next sessions
 export EDITOR=vim
 
 # rvm
-export PATH=$PATH:$HOME/.rvm/bin
+export PATH="$PATH:$HOME/.rvm/bin"
 
 # nvm
 export NVM_DIR=$HOME/.nvm
@@ -100,4 +100,5 @@ eval "$(docker-machine env default)"
 # Aliases
 # =======
 alias ctags="$(brew --prefix)/bin/ctags"
-alias dev='cd $HOME/Development'
+alias dev='cd $DEVDIR'
+
