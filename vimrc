@@ -1,5 +1,5 @@
-" vim-plug settings
-" =================
+" Plugins
+" =======
 call plug#begin('~/.vim/plugged')
 
 " Make sure you use single quotes
@@ -23,15 +23,17 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
-Plug 'tmux-plugins/vim-tmux'
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'janko-m/vim-test'
-Plug 'benmills/vimux'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
 " Themes
 Plug 'tomasr/molokai'
 Plug 'w0ng/vim-hybrid'
+
+" Tmux Plugins
+Plug 'tmux-plugins/vim-tmux'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'benmills/vimux'
 
 " Ruby Plugins
 Plug 'vim-ruby/vim-ruby'
@@ -189,7 +191,6 @@ vmap <Leader>w <ESC><ESC>:w<CR>
 map 0 ^
 
 
-" ===============
 " Plugin Settings
 " ===============
 
@@ -330,13 +331,6 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 
-""" vimux
-map <Leader>vp :VimuxPromptCommand<CR>
-map <Leader>vq :VimuxCloseRunner<CR>
-map <Leader>vl :VimuxRunLastCommand<CR>
-map <Leader>vz :VimuxZoomRunner<CR>
-
-
 """ tagbar
 nmap <F8> :TagbarToggle<CR>
 
@@ -380,6 +374,13 @@ let g:acp_enableAtStartup = 0
 " autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 " autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=tern#Complete
+
+
+""" vimux
+map <Leader>vp :VimuxPromptCommand<CR>
+map <Leader>vq :VimuxCloseRunner<CR>
+map <Leader>vl :VimuxRunLastCommand<CR>
+map <Leader>vz :VimuxZoomRunner<CR>
 
 
 """ vim-test
