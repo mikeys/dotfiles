@@ -65,15 +65,15 @@ export SAVEHIST=$HISTSIZE # This will save history for next sessions
 
 export EDITOR=vim
 
-# rvm
-export PATH="$PATH:$HOME/.rvm/bin"
-
 # nvm
 export NVM_DIR=$HOME/.nvm
 [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" --no-use
 
 # gvm
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+
+# rvm
+export PATH="$PATH:$HOME/.rvm/bin"
 
 # pip should only run if there is a virtualenv currently activated
 export PIP_REQUIRE_VIRTUALENV=true
