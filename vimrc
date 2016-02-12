@@ -8,6 +8,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'rking/ag.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Chiel92/vim-autoformat'
+Plug 'qpkorr/vim-bufkill'
 Plug 'flazz/vim-colorschemes'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tacahiroy/ctrlp-funky'
@@ -19,16 +20,21 @@ Plug 'fatih/vim-go'
 Plug 'Yggdroot/indentLine'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
-Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'tmux-plugins/vim-tmux'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'janko-m/vim-test'
+Plug 'benmills/vimux'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
 " Themes
 Plug 'tomasr/molokai'
 Plug 'w0ng/vim-hybrid'
+
+" Ruby Plugins
+Plug 'vim-ruby/vim-ruby'
 
 " JS Plugins
 Plug 'pangloss/vim-javascript'
@@ -170,6 +176,9 @@ vnoremap > >gv
 " cycle through buffers
 nnoremap <C-n> :bnext<CR>
 nnoremap <C-p> :bprevious<CR>
+
+" Fast close buffer (using vim buf-kill)
+map <Leader>BD :BD<CR>
 
 " Fast saving
 map <Leader>w :w<CR>
@@ -321,6 +330,13 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 
+""" vimux
+map <Leader>vp :VimuxPromptCommand<CR>
+map <Leader>vq :VimuxCloseRunner<CR>
+map <Leader>vl :VimuxRunLastCommand<CR>
+map <Leader>vz :VimuxZoomRunner<CR>
+
+
 """ tagbar
 nmap <F8> :TagbarToggle<CR>
 
@@ -361,10 +377,18 @@ let g:acp_enableAtStartup = 0
 " Enable omni completion.
 " autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 " autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 " autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 " autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=tern#Complete
+
+
+""" vim-test
+let g:test#strategy = 'vimux'
+nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>a :TestSuite<CR>
+" nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>g :TestVisit<CR>
 
 
 """ vim-jsbeautify
