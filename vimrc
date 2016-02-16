@@ -24,6 +24,7 @@ Plug 'tpope/vim-surround'
 Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'janko-m/vim-test'
+Plug 'mikeys/vim-yaml'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
 " Themes
@@ -180,7 +181,7 @@ nnoremap <C-n> :bnext<CR>
 nnoremap <C-p> :bprevious<CR>
 
 " Fast close buffer (using vim buf-kill)
-map <Leader>BD :BD<CR>
+map <Leader>bd :BD<CR>
 
 " Fast saving
 map <Leader>w :w<CR>
