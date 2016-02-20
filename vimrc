@@ -9,6 +9,7 @@ Plug 'rking/ag.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Chiel92/vim-autoformat'
 Plug 'qpkorr/vim-bufkill'
+Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'flazz/vim-colorschemes'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tacahiroy/ctrlp-funky'
@@ -17,7 +18,6 @@ Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'fatih/vim-go'
-Plug 'Yggdroot/indentLine'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
@@ -140,8 +140,8 @@ autocmd BufWinLeave * call clearmatches()
 
 set expandtab 	" Use spaces instead of tabs
 set smarttab 	" Be smart when using tabs ;)
-set tabstop=4	" number of spaces in a tab
-set shiftwidth=4 " number of spaces for indent
+set tabstop=2	" number of spaces in a tab
+set shiftwidth=2 " number of spaces for indent
 
 " Linebreak on 500 characters
 set linebreak
@@ -216,6 +216,7 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_max_height = 10
 let g:ctrlp_switch_buffer = 1 " jump to buffer in the same tab if already open
+let g:ctrlp_show_hidden = 1
 
 " open multiple files with <c-z> to mark and <c-o> to open. v - opening in
 " vertical splits; j - jump to first open buffer; r - open first in current buffer
@@ -284,10 +285,6 @@ let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
 
 
-""" indentLine
-au BufRead,BufEnter,BufNewFile * IndentLinesReset
-
-
 """ NERDTree
 " General properties
 let NERDTreeDirArrows=1
@@ -330,7 +327,7 @@ let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
+let g:syntastic_javascript_checkers = ['eslint']
 
 """ tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -378,11 +375,12 @@ autocmd FileType javascript setlocal omnifunc=tern#Complete
 
 
 """ vimux
+let g:VimuxHeight = "40"
+let g:VimuxOrientation = 'v'
 map <Leader>vp :VimuxPromptCommand<CR>
 map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vl :VimuxRunLastCommand<CR>
 map <Leader>vz :VimuxZoomRunner<CR>
-
 
 """ vim-test
 let g:test#strategy = 'vimux'
