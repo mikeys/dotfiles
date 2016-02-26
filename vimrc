@@ -119,7 +119,7 @@ set mat=2           " How many tenths of a second to blink when matching bracket
 set noerrorbells    " No annoying sound on errors
 set novisualbell
 set t_vb=
-" set tm=100          " Timeout Len
+" set tm=100        " Timeout Len
 set timeoutlen=1000
 set ttimeoutlen=0
 set foldcolumn=0    " Make sure that extra margin on left is removed
@@ -152,21 +152,21 @@ autocmd BufWinLeave * call clearmatches()
 " Text, tab and indent related
 " ============================
 
-set expandtab   " Use spaces instead of tabs
-" set smarttab  " Be smart when using tabs ;)
-set tabstop=2 " number of spaces in a tab
-set shiftwidth=2 " number of spaces for indent
+set expandtab     " Use spaces instead of tabs
+set tabstop=2     " number of spaces in a tab
+set shiftwidth=2  " number of spaces for indent
+set softtabstop=2
+" set smarttab    " Be smart when using tabs ;)
 
 " Linebreak on 500 characters
 set linebreak
 set textwidth=500
 
-set autoindent  " Automatically indents new line
-set nowrap    " Do not wrap words (view)
+set autoindent    " Automatically indents new line
+set nowrap        " Do not wrap words (view)
 
 " Prevent vim from adding empty line at the end of every file
 set noeol
-set binary
 
 " Return to last edit position when opening files
 autocmd BufReadPost *
