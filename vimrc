@@ -18,10 +18,15 @@ Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'fatih/vim-go'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'mustache/vim-mustache-handlebars'
 Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdcommenter'
+Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/syntastic'
+Plug 'pmsorhaindo/syntastic-local-eslint.vim'
 Plug 'majutsushi/tagbar'
 Plug 'janko-m/vim-test'
 Plug 'mikeys/vim-yaml'
@@ -44,6 +49,13 @@ Plug 'pangloss/vim-javascript'
 Plug 'maksimr/vim-jsbeautify', { 'do': 'git submodule update --init --recursive' }
 Plug 'mxw/vim-jsx'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+
+" HTML Plugins
+Plug 'othree/html5.vim'
+Plug 'gregsexton/MatchTag'
+
+" Order dependant plugins (after other plugins are loaded)
+Plug 'ryanoasis/vim-devicons'
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -81,37 +93,39 @@ let g:mapleader = ","
 " vim user interface
 " ==================
 
-set so=999 			" Make sure that coursor is always vertically centered
-set colorcolumn=80 	" add vertical lines on columns
-set wildmenu 		" Turn on the WiLd menu
+set so=999          " Make sure that coursor is always vertically centered
+set colorcolumn=80  " add vertical lines on columns
+set wildmenu        " Turn on the WiLd menu
 set wildmode=list:longest,full " Set command-line completion mode
 set wildignore=*.git,*.dll,*.o,*.obj,*.bak,*.exe,*.pyc,*.swp,*.jpg,*.gif,*.png " ignore formats
-set cursorline 		" Highlight current line - track cursor position more easily
+set cursorline      " Highlight current line - track cursor position more easily
 set completeopt=longest,menuone " Completion options (select longest + show menu even if a single match is found)
-set ruler 			" Show line, column number, and relative position in the status line
-set number 			" Show line numbers - could be toggled on/off on-fly by pressing F6
-set showcmd 		" Show (partial) commands (or size of selection in visual mode) in the status line
-set hidden 			" Can change buffer without saving
+set ruler           " Show line, column number, and relative position in the status line
+set number          " Show line numbers - could be toggled on/off on-fly by pressing F6
+set showcmd         " Show (partial) commands (or size of selection in visual mode) in the status line
+set hidden          " Can change buffer without saving
 set backspace=eol,start,indent " Configure backspace so it acts as it should act
 set whichwrap+=<,>,h,l,[,] " Automatically wrap left and right
-set mouse=a			" Enable mouse everywhere
-set infercase 		" Allow smarter completion by infering the case
-set ignorecase 		" Ignore case when searching
-set smartcase 		" When searching try to be smart about cases
-set hlsearch 		" Highlight search results
-set incsearch 		" Start search upon typing
-set lazyredraw 		" Don't redraw while executing macros (good performance config)
-set magic 			" For regular expressions turn magic on
-set showmatch 		" Show matching brackets when text indicator is over them
-set mat=2 			" How many tenths of a second to blink when matching brackets
-set noerrorbells 	" No annoying sound on errors
+set mouse=a         " Enable mouse everywhere
+set infercase       " Allow smarter completion by infering the case
+set ignorecase      " Ignore case when searching
+set smartcase       " When searching try to be smart about cases
+set hlsearch        " Highlight search results
+set incsearch       " Start search upon typing
+set lazyredraw      " Don't redraw while executing macros (good performance config)
+set magic           " For regular expressions turn magic on
+set showmatch       " Show matching brackets when text indicator is over them
+set mat=2           " How many tenths of a second to blink when matching brackets
+set noerrorbells    " No annoying sound on errors
 set novisualbell
 set t_vb=
-set tm=500 			" Timeout Len
-set foldcolumn=0 	" Make sure that extra margin on left is removed
-set numberwidth=4 	" Number of columns for line numbers
+" set tm=100          " Timeout Len
+set timeoutlen=1000
+set ttimeoutlen=0
+set foldcolumn=0    " Make sure that extra margin on left is removed
+set numberwidth=4   " Number of columns for line numbers
 set nrformats=octal,hex,alpha " Enable Ctrl-A/Ctrl-X on octal, hex and characters
-set laststatus=2 	" Always show the status line
+set laststatus=2    " Always show the status line
 
 
 " Theme related
@@ -138,17 +152,17 @@ autocmd BufWinLeave * call clearmatches()
 " Text, tab and indent related
 " ============================
 
-set expandtab 	" Use spaces instead of tabs
-set smarttab 	" Be smart when using tabs ;)
-set tabstop=2	" number of spaces in a tab
+set expandtab   " Use spaces instead of tabs
+" set smarttab  " Be smart when using tabs ;)
+set tabstop=2 " number of spaces in a tab
 set shiftwidth=2 " number of spaces for indent
 
 " Linebreak on 500 characters
 set linebreak
 set textwidth=500
 
-set autoindent 	" Automatically indents new line
-set nowrap		" Do not wrap words (view)
+set autoindent  " Automatically indents new line
+set nowrap    " Do not wrap words (view)
 
 " Prevent vim from adding empty line at the end of every file
 set noeol
@@ -247,8 +261,8 @@ nmap <leader>M :CtrlPBufTagAll<cr>
 
 
 """ ctrlp-funky
-let g:ctrlp_funky_syntax_highlight = 1 	" syntax highlighting on funky matches
-let g:ctrlp_funky_matchtype = 'path' 	" matched chars highlighting
+let g:ctrlp_funky_syntax_highlight = 1  " syntax highlighting on funky matches
+let g:ctrlp_funky_matchtype = 'path'  " matched chars highlighting
 
 noremap <Leader>fu :CtrlPFunky<Cr>
 " narrow the list down with a word under cursor
@@ -327,7 +341,11 @@ let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['eslint']
+" let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_mode_map = {
+    \ "mode": "active",
+    \ "passive_filetypes": ["html", "html.handlebars"] }
+
 
 """ tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -412,6 +430,11 @@ let g:tern_map_keys = 1
 let g:tern_show_argument_hints='on_hold'
 
 
+""" vim-devicons
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+
+
 " Helper Functions
 " ================
 function! VisualSelection(direction, extra_filter) range
@@ -434,3 +457,28 @@ function! VisualSelection(direction, extra_filter) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
+" Create parent directories on save, if they do not exist
+function s:MkNonExDir(file, buf)
+    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+        let dir=fnamemodify(a:file, ':h')
+        if !isdirectory(dir)
+            call mkdir(dir, 'p')
+        endif
+    endif
+endfunction
+augroup BWCCreateDir
+    autocmd!
+    autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
+augroup END
+
+" Change from block to cursor on insert mode
+" if exists('$TMUX')
+"   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+"   let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+" else
+"   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+"   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+" endif
+" autocmd InsertEnter * set cul
+" autocmd InsertLeave * set nocul
