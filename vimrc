@@ -438,7 +438,7 @@ let g:DevIconsEnableFoldersOpenClose = 1
 " Helper Functions
 " ================
 
-" Search for whatever is currently selected in visual mode
+" Search for what is currently selected in visual mode
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
     execute "normal! vgvy"
