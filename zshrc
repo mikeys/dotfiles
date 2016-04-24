@@ -37,9 +37,12 @@ export ZSH=$HOME/.oh-my-zsh
 
 ZSH_THEME="steeef_custom"
 
-plugins=(brew bundler docker docker-compose heroku git npm node gem osx rails ruby rvm)
+plugins=(brew bundler docker docker-compose heroku git npm node gem osx rails)
+plugins+=(ruby rvm zsh-completions zsh-syntax-highlighting)
+autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
+
 
 # User configuration
 # ==================
@@ -76,7 +79,7 @@ export NVM_DIR=$HOME/.nvm
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # pip should only run if there is a virtualenv currently activated
-export PIP_REQUIRE_VIRTUALENV=true
+export PIP_REQUIRE_VIRTUALENV=false
 
 # pip cache packages to avoid re-downloading
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
@@ -93,12 +96,18 @@ eval "$(docker-machine env default)"
 # gcloud autocomplete
 # source /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 
-# awscli autocomplete
-# source /usr/local/share/zsh/site-functions/_aws
+# awscli completions
+source '/usr/local/share/zsh/site-functions/_aws'
+
+# VS Code
+function code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*; }
 
 
 # Aliases
 # =======
 alias ctags="$(brew --prefix)/bin/ctags"
 alias dev='cd $DEVDIR'
+alias dockerclean='docker rm -v $(docker ps -a -q -f status=exited)'
 
+# Load private configurations
+source "$HOME/.zshrc.local"
