@@ -10,49 +10,80 @@ Plug 'Chiel92/vim-autoformat'
 Plug 'qpkorr/vim-bufkill'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'flazz/vim-colorschemes'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tacahiroy/ctrlp-funky'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'mattn/emmet-vim'
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
 Plug 'fatih/vim-go'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdcommenter'
-Plug 'sheerun/vim-polyglot'
-Plug 'kana/vim-smartinput'
 Plug 'tpope/vim-surround'
-Plug 'scrooloose/syntastic'
-Plug 'pmsorhaindo/syntastic-local-eslint.vim'
 Plug 'majutsushi/tagbar'
 Plug 'janko-m/vim-test'
 Plug 'mikeys/vim-yaml'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
-" Themes
-Plug 'tomasr/molokai'
-Plug 'w0ng/vim-hybrid'
+" Syntax
+Plug 'sheerun/vim-polyglot'
+Plug 'kana/vim-smartinput'
+if has('nvim')
+  Plug 'benekastah/neomake'
+else
+  Plug 'scrooloose/syntastic'
+  Plug 'pmsorhaindo/syntastic-local-eslint.vim'
+endif
 
-" Tmux Plugins
+" CtrlP
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tacahiroy/ctrlp-funky'
+
+" Nerdtree
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" Autocomplete
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim'
+  " Plug 'Shougo/context_filetype.vim'
+else
+  Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+endif
+
+" Git
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'mattn/gist-vim' | Plug 'mattn/webapi-vim'
+
+" Tmux
 Plug 'tmux-plugins/vim-tmux'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'benmills/vimux'
 
-" Ruby Plugins
+" Ruby
 Plug 'vim-ruby/vim-ruby'
 
-" JS Plugins
+" JavaScript
 Plug 'pangloss/vim-javascript'
 Plug 'maksimr/vim-jsbeautify', { 'do': 'git submodule update --init --recursive' }
 Plug 'mxw/vim-jsx'
-Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'othree/jsdoc-syntax.vim'
+if has('nvim')
+  Plug 'neovim/node-host'
+  Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': 'npm install --update' }
+  Plug 'carlitux/deoplete-ternjs', { 'build': { 'mac': 'npm install -g tern' } }
+else
+  Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+endif
 
-" HTML Plugins
+" HTML
+Plug 'alvan/vim-closetag'
+Plug 'mattn/emmet-vim'
 Plug 'othree/html5.vim'
 Plug 'gregsexton/MatchTag'
+
+" Handlebars
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'joukevandermaas/vim-ember-hbs'
+
+" Themes
+Plug 'w0ng/vim-hybrid'
 
 " Order dependant plugins (after other plugins are loaded)
 Plug 'ryanoasis/vim-devicons'
@@ -135,7 +166,6 @@ syntax on " Enable syntax highlighting
 
 set t_Co=256
 set background=dark
-let g:hybrid_custom_term_colors = 1
 colorscheme hybrid
 
 set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard language
@@ -194,8 +224,14 @@ vnoremap > >gv
 nnoremap <C-n> :bnext<CR>
 nnoremap <C-p> :bprevious<CR>
 
+nnoremap <A-x> <C-a>
+
 " Fast close buffer (using vim buf-kill)
 map <Leader>bd :BD<CR>
+
+" Intuitively resize active pane
+nnoremap <C-w>> :call SetWinAdjust('r', 10)<CR>
+nnoremap <C-w>< :call SetWinAdjust('l', 10)<CR>
 
 " Fast saving
 map <Leader>w :w<CR>
@@ -204,6 +240,13 @@ vmap <Leader>w <ESC><ESC>:w<CR>
 
 " Remap VIM 0 to first non-blank character
 map 0 ^
+
+
+" Force Filetype
+" ===============
+autocmd BufRead,BufNewFile .eslintrc setfiletype json
+autocmd BufRead,BufNewFile .jshintrc setfiletype json
+autocmd BufRead,BufNewFile .jsbeautifyrc setfiletype json
 
 
 " Plugin Settings
@@ -330,6 +373,33 @@ let NERDDefaultNesting=0         " don't recomment commented lines
 nmap <leader>/ <Plug>NERDCommenterToggle
 vmap <leader>/ <Plug>NERDCommenterToggle
 
+""" Polyglot
+let g:polyglot_disabled = ['css','javascript','html']
+
+""" Neomake
+let g:neomake_open_list=2
+let g:neomake_warning_sign = {
+      \ 'text': '✹',
+      \ 'texthl': 'WarningMsg',
+      \ }
+
+let g:neomake_error_sign = {
+      \ 'text': '✖',
+      \ 'texthl': 'ErrorMsg',
+      \ }
+
+if executable('eslint')
+  let g:neomake_javascript_enabled_makers = ['eslint']
+else
+  echoe 'No eslint executable detected. Install eslint for JavaScript syntax higlighting. `npm install -g eslint`'
+endif
+
+if exists('g:plugs["neomake"]')
+  if has('autocmd')
+    autocmd! BufWritePost * Neomake
+  endif
+endif
+
 
 """ Syntastic
 set statusline+=%#warningmsg#
@@ -341,7 +411,7 @@ let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-" let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_mode_map = {
     \ "mode": "active",
     \ "passive_filetypes": ["html", "html.handlebars"] }
@@ -380,16 +450,37 @@ let g:tagbar_type_go = {
 \ }
 
 
-""" YouCompleteMe
+""" Autocomplete
+
+" Deoplete
+if has('nvim')
+  set omnifunc=syntaxcomplete#Complete
+  let g:deoplete#enable_at_startup = 1
+
+  let g:deoplete#omni#input_patterns = {}
+  let g:deoplete#omni#input_patterns.html = '<[^>]*'
+  let g:deoplete#omni#input_patterns.css = '^\s\+\w\+\|\w\+[):;]\?\s\+\w*\|[@!]'
+  let g:deoplete#omni#input_patterns.scss = '^\s\+\w\+\|\w\+[):;]\?\s\+\w*\|[@!]'
+
+  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+  let g:deoplete#enable_smart_case = 1
+  let g:deoplete#auto_completion_start_length = 1  " Set minimum syntax keyword length.
+
+  inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+  inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+endif
+
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
 
 " Enable omni completion.
-" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=tern#Complete
+autocmd FileType html,html.handlebars,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
+autocmd FileType css,scss set iskeyword=@,48-57,_,-,?,!,192-255
 " autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 " autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=tern#Complete
 
 
 """ vimux
@@ -400,8 +491,10 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vl :VimuxRunLastCommand<CR>
 map <Leader>vz :VimuxZoomRunner<CR>
 
+
 """ vim-test
 let g:test#strategy = 'vimux'
+
 nmap <silent> <leader>t :TestNearest<CR>
 nmap <silent> <leader>T :TestFile<CR>
 nmap <silent> <leader>a :TestSuite<CR>
@@ -430,7 +523,15 @@ let g:tern_map_keys = 1
 let g:tern_show_argument_hints='on_hold'
 
 
-""" vim-devicons
+""" closetag.vim
+let g:closetag_filenames = "*.html,*.hbs"
+
+
+""" vim-mustache-handlebars
+let g:mustache_abbreviations = 1
+
+
+""" WebDevIcons
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 
@@ -482,3 +583,14 @@ else
   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
+
+" Intuitively resize active pane
+fun! SetWinAdjust(direction, interval)
+  if winnr() == winnr('$')
+    let resize_by = (a:direction == 'r' ? '-' : '+') . a:interval
+  else
+    let resize_by = (a:direction == 'r' ? '+' : '-') . a:interval
+  endif
+
+  execute 'vertical resize ' . resize_by
+endfun
