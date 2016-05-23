@@ -70,7 +70,7 @@ export EDITOR=vim
 
 # nvm
 export NVM_DIR=$HOME/.nvm
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" --no-use
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
 
 # gvm
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
@@ -108,6 +108,7 @@ function code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
 alias ctags="$(brew --prefix)/bin/ctags"
 alias dev='cd $DEVDIR'
 alias dockerclean='docker rm -v $(docker ps -a -q -f status=exited)'
+alias vim='nvim'
 
 # Load private configurations
 source "$HOME/.zshrc.local"

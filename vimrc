@@ -60,13 +60,14 @@ Plug 'vim-ruby/vim-ruby'
 
 " JavaScript
 Plug 'pangloss/vim-javascript'
+Plug 'jelera/vim-javascript-syntax', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'maksimr/vim-jsbeautify', { 'do': 'git submodule update --init --recursive' }
 Plug 'mxw/vim-jsx'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'othree/jsdoc-syntax.vim'
 if has('nvim')
   Plug 'neovim/node-host'
-  Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': 'npm install --update' }
+  " Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': 'npm install --update' }
   Plug 'carlitux/deoplete-ternjs', { 'build': { 'mac': 'npm install -g tern' } }
 else
   Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
@@ -84,8 +85,11 @@ Plug 'joukevandermaas/vim-ember-hbs'
 
 " Themes
 Plug 'w0ng/vim-hybrid'
+Plug 'crusoexia/vim-monokai'
+Plug 'Lokaltog/vim-distinguished'
 
 " Order dependant plugins (after other plugins are loaded)
+Plug 'jelera/vim-javascript-syntax'
 Plug 'ryanoasis/vim-devicons'
 
 " Add plugins to &runtimepath
@@ -177,6 +181,10 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+
+" Make sure that open and close tags are colored the same
+highlight link xmlEndTag xmlTag
+highlight link htmlEndTag htmlTag
 
 
 " Text, tab and indent related
@@ -373,8 +381,10 @@ let NERDDefaultNesting=0         " don't recomment commented lines
 nmap <leader>/ <Plug>NERDCommenterToggle
 vmap <leader>/ <Plug>NERDCommenterToggle
 
+
 """ Polyglot
-let g:polyglot_disabled = ['css','javascript','html']
+let g:polyglot_disabled = ['css', 'javascript', 'html', 'javascript.jsx']
+
 
 """ Neomake
 let g:neomake_open_list=2
@@ -459,8 +469,8 @@ if has('nvim')
 
   let g:deoplete#omni#input_patterns = {}
   let g:deoplete#omni#input_patterns.html = '<[^>]*'
-  let g:deoplete#omni#input_patterns.css = '^\s\+\w\+\|\w\+[):;]\?\s\+\w*\|[@!]'
-  let g:deoplete#omni#input_patterns.scss = '^\s\+\w\+\|\w\+[):;]\?\s\+\w*\|[@!]'
+  let g:deoplete#omni#input_patterns.css = '^\s+\w+|\w+[):;](\s+)?|[@!]'
+  let g:deoplete#omni#input_patterns.scss = '^\s+\w+|\w+[):;](\s+)?|[@!]'
 
   autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -475,12 +485,19 @@ endif
 let g:acp_enableAtStartup = 0
 
 " Enable omni completion.
-autocmd FileType javascript setlocal omnifunc=tern#Complete
+autocmd FileType javascript,javascript.jsx setlocal omnifunc=tern#Complete
 autocmd FileType html,html.handlebars,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
 autocmd FileType css,scss set iskeyword=@,48-57,_,-,?,!,192-255
-" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-" autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+
+""" vim-timux-navigator
+" Workaround for annoying problem with C-h not working with neovim
+if has('nvim')
+    nmap <BS> :<C-u>TmuxNavigateLeft<CR>
+endif
 
 
 """ vimux
@@ -503,21 +520,30 @@ nmap <silent> <leader>g :TestVisit<CR>
 
 
 """ vim-jsbeautify
-autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+autocmd FileType javascript noremap <buffer> <c-f> :call JsBeautify()<cr>
 autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
 autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
 autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
 autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
 
 " Format selection (visual mode)
-autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+autocmd FileType javascript vnoremap <buffer> <c-f> :call RangeJsBeautify()<cr>
 autocmd FileType json vnoremap <buffer> <c-f> :call RangeJsonBeautify()<cr>
 autocmd FileType jsx vnoremap <buffer> <c-f> :call RangeJsxBeautify()<cr>
 autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
 autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 
 
+""" vim-jsx
+let g:jsx_ext_required = 0
+
+
+""" javascript-libraries-syntax.vim
+let g:used_javascript_libs = 'jquery,underscore,react'
+
+
 """ tern_for_vim
+let g:tern_request_timeout = 1
 let g:tern_map_prefix = '<leader>'
 let g:tern_map_keys = 1
 let g:tern_show_argument_hints='on_hold'
