@@ -22,8 +22,7 @@ Plug 'mikeys/vim-yaml'
 " Syntax
 Plug 'sheerun/vim-polyglot'
 Plug 'kana/vim-smartinput'
-Plug 'scrooloose/syntastic'
-Plug 'pmsorhaindo/syntastic-local-eslint.vim'
+Plug 'benekastah/neomake'
 
 " CtrlP
 Plug 'ctrlpvim/ctrlp.vim'
@@ -34,7 +33,8 @@ Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Autocomplete
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+  Plug 'Shougo/deoplete.nvim'
+" Plug 'Shougo/context_filetype.vim'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -43,6 +43,7 @@ Plug 'mattn/gist-vim' | Plug 'mattn/webapi-vim'
 
 " Go
 Plug 'fatih/vim-go'
+Plug 'zchee/deoplete-go', { 'do': 'make' }
 
 " Tmux
 Plug 'tmux-plugins/vim-tmux'
@@ -61,7 +62,9 @@ Plug 'maksimr/vim-jsbeautify', { 'do': 'git submodule update --init --recursive'
 Plug 'mxw/vim-jsx'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'othree/jsdoc-syntax.vim'
-Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+Plug 'neovim/node-host'
+" Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': 'npm install --update' }
+Plug 'carlitux/deoplete-ternjs', { 'build': { 'mac': 'npm install -g tern' } }
 
 " HTML
 Plug 'alvan/vim-closetag'
@@ -385,20 +388,29 @@ vmap <leader>/ <Plug>NERDCommenterToggle
 let g:polyglot_disabled = ['css', 'javascript', 'html', 'javascript.jsx']
 
 
-""" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+""" Neomake
+let g:neomake_open_list=2
+let g:neomake_warning_sign = {
+      \ 'text': '✹',
+      \ 'texthl': 'WarningMsg',
+      \ }
 
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_mode_map = {
-    \ "mode": "active",
-    \ "passive_filetypes": ["html", "html.handlebars"] }
+let g:neomake_error_sign = {
+      \ 'text': '✖',
+      \ 'texthl': 'ErrorMsg',
+      \ }
+
+if executable('eslint')
+  let g:neomake_javascript_enabled_makers = ['eslint']
+else
+  echoe 'No eslint executable detected. Install eslint for JavaScript syntax higlighting. `npm install -g eslint`'
+endif
+
+if exists('g:plugs["neomake"]')
+  if has('autocmd')
+    autocmd! BufWritePost * Neomake
+  endif
+endif
 
 
 """ tagbar
@@ -436,6 +448,23 @@ let g:tagbar_type_go = {
 
 """ Autocomplete
 
+" Deoplete
+set omnifunc=syntaxcomplete#Complete
+let g:deoplete#enable_at_startup = 1
+
+let g:deoplete#omni#input_patterns = {}
+let g:deoplete#omni#input_patterns.html = '<[^>]*'
+let g:deoplete#omni#input_patterns.css = '^\s+\w+|\w+[):;](\s+)?|[@!]'
+let g:deoplete#omni#input_patterns.scss = '^\s+\w+|\w+[):;](\s+)?|[@!]'
+
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#auto_completion_start_length = 1  " Set minimum syntax keyword length.
+
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
 
@@ -446,6 +475,11 @@ autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
 autocmd FileType css,scss set iskeyword=@,48-57,_,-,?,!,192-255
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+
+""" vim-timux-navigator
+" Workaround for annoying problem with C-h not working with neovim
+nmap <BS> :<C-u>TmuxNavigateLeft<CR>
 
 
 """ vimux
@@ -550,13 +584,7 @@ augroup BWCCreateDir
 augroup END
 
 " Change from block cursor to pipe cursor on insert mode
-if exists('$TMUX')
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 " Intuitively resize active pane
 fun! SetWinAdjust(direction, interval)
