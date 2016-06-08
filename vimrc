@@ -12,7 +12,6 @@ Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'flazz/vim-colorschemes'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-endwise'
-Plug 'fatih/vim-go'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
@@ -50,6 +49,12 @@ endif
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'mattn/gist-vim' | Plug 'mattn/webapi-vim'
+
+" Go
+Plug 'fatih/vim-go'
+if has('nvim')
+  Plug 'zchee/deoplete-go', { 'do': 'make' }
+endif
 
 " Tmux
 Plug 'tmux-plugins/vim-tmux'
@@ -326,6 +331,7 @@ nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>nn
 
 """ vim-go
 " Disable opening browser after posting to your snippet to play.golang.org:
+let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
 
 " Show a list of interfaces which is implemented by the type under your cursor
@@ -352,6 +358,13 @@ au FileType go nmap <leader>c <Plug>(go-coverage)
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
+
+
+""" deoplete-go
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+let g:deoplete#sources#go#pointer = 1
+let g:deoplete#sources#go#package_dot = 1
 
 
 """ NERDTree
