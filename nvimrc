@@ -34,7 +34,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Autocomplete
-  Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim'
 " Plug 'Shougo/context_filetype.vim'
 
 " Git
