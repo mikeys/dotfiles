@@ -63,6 +63,7 @@ Plug 'maksimr/vim-jsbeautify', { 'do': 'git submodule update --init --recursive'
 Plug 'mxw/vim-jsx'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'othree/jsdoc-syntax.vim'
+Plug 'jaawerth/neomake-local-eslint-first'
 Plug 'neovim/node-host'
 " Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': 'npm install --update' }
 Plug 'carlitux/deoplete-ternjs', { 'build': { 'mac': 'npm install -g tern' } }
@@ -405,11 +406,7 @@ let g:neomake_error_sign = {
       \ 'texthl': 'ErrorMsg',
       \ }
 
-if executable('eslint')
-  let g:neomake_javascript_enabled_makers = ['eslint']
-else
-  echoe 'No eslint executable detected. Install eslint for JavaScript syntax higlighting. `npm install -g eslint`'
-endif
+let g:neomake_javascript_enabled_makers = ['eslint']
 
 if exists('g:plugs["neomake"]')
   if has('autocmd')
@@ -522,7 +519,7 @@ autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 
 
 """ vim-jsx
-let g:jsx_ext_required = 0
+let g:jsx_ext_required = 1
 
 
 """ javascript-libraries-syntax.vim
