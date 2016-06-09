@@ -1,0 +1,15 @@
+# brew
+ansible                         git                             mcrypt                          python
+autoconf                        gnupg                           mhash                           python3
+automake                        gotags                          mysql                           readline
+awscli                          hub                             neovim                          reattach-to-user-namespace
+ccat                            kibana                          node                            redis
+cmake                           libevent                        nvm                             sqlite
+ctags                           libgpg-error                    openssl                         the_silver_searcher
+elasticsearch17                 libksba                         pcre                            tmux
+gawk                            libtool                         phantomjs                       vim
+gdbm                            libyaml                         pkg-config                      xz
+gettext                         lua                             postgresql
+
+# brew cask
+filezilla   firefox     iterm2      java        licecap     sequel-pro  skitch      slack       teamviewer
