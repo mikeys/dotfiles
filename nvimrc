@@ -11,7 +11,6 @@ Plug 'qpkorr/vim-bufkill'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'flazz/vim-colorschemes'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'tpope/vim-endwise'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
@@ -21,7 +20,9 @@ Plug 'mikeys/vim-yaml'
 
 " Syntax
 Plug 'sheerun/vim-polyglot'
-Plug 'kana/vim-smartinput'
+" Plug 'kana/vim-smartinput'
+Plug 'Raimondi/delimitMate'   " Keep delimitMate before vim-endwise
+Plug 'tpope/vim-endwise'
 Plug 'benekastah/neomake'
 
 " CtrlP
@@ -386,6 +387,10 @@ vmap <leader>/ <Plug>NERDCommenterToggle
 
 """ Polyglot
 let g:polyglot_disabled = ['css', 'javascript', 'html', 'javascript.jsx']
+
+
+""" delimitMate
+let delimitMate_expand_cr = 1
 
 
 """ Neomake
