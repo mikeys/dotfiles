@@ -7,3 +7,10 @@ dotfiles
 infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
 tic $TERM.ti
 ```
+
+##### Install gem-ctags and gem-browse
+gem-browse: (https://github.com/tpope/gem-browse)
+gem-ctags: (https://github.com/tpope/gem-ctags)
+
+##### Install antigen
+brew install antigen
