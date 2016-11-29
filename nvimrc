@@ -6,6 +6,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'rking/ag.vim'
+" Plug 'Numkil/ag.nvim'
 Plug 'Chiel92/vim-autoformat'
 Plug 'qpkorr/vim-bufkill'
 Plug 'ConradIrwin/vim-bracketed-paste'
@@ -14,16 +15,18 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
-Plug 'majutsushi/tagbar'
 Plug 'janko-m/vim-test'
 Plug 'mikeys/vim-yaml'
 
 " Syntax
 Plug 'sheerun/vim-polyglot'
-" Plug 'kana/vim-smartinput'
 Plug 'Raimondi/delimitMate'   " Keep delimitMate before vim-endwise
 Plug 'tpope/vim-endwise'
 Plug 'benekastah/neomake'
+
+" CTags
+Plug 'majutsushi/tagbar'
+Plug 'xolox/vim-misc' | Plug 'xolox/vim-easytags'
 
 " CtrlP
 Plug 'ctrlpvim/ctrlp.vim'
@@ -40,7 +43,7 @@ Plug 'Shougo/deoplete.nvim'
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug 'mattn/gist-vim' | Plug 'mattn/webapi-vim'
+Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim'
 
 " Go
 Plug 'fatih/vim-go'
@@ -54,6 +57,7 @@ Plug 'benmills/vimux'
 " Ruby
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rake'
 Plug 'vim-ruby/vim-ruby'
 
 " JavaScript
@@ -66,7 +70,7 @@ Plug 'othree/jsdoc-syntax.vim'
 Plug 'jaawerth/neomake-local-eslint-first'
 Plug 'neovim/node-host'
 " Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': 'npm install --update' }
-Plug 'carlitux/deoplete-ternjs', { 'build': { 'mac': 'npm install -g tern' } }
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 
 " HTML
 Plug 'alvan/vim-closetag'
@@ -121,7 +125,10 @@ set noswapfile
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
 let mapleader=","
-let g:mapleader = ","
+let g:mapleader=","
+
+" Disable Python 2 interpreter check
+let g:python_host_skip_check=1
 
 
 " vim user interface
@@ -160,6 +167,7 @@ set foldcolumn=0    " Make sure that extra margin on left is removed
 set numberwidth=4   " Number of columns for line numbers
 set nrformats=octal,hex,alpha " Enable Ctrl-A/Ctrl-X on octal, hex and characters
 set laststatus=2    " Always show the status line
+set autoread
 
 
 " Theme related
@@ -237,7 +245,7 @@ map <Leader>bd :BD<CR>
 nnoremap <C-w>> :call SetWinAdjust('r', 10)<CR>
 nnoremap <C-w>< :call SetWinAdjust('l', 10)<CR>
 
-" Fast saving
+" Fast file saving
 map <Leader>w :w<CR>
 imap <Leader>w <ESC>:w<CR>
 vmap <Leader>w <ESC><ESC>:w<CR>
@@ -266,10 +274,16 @@ let g:airline#extensions#tabline#enabled = 1
 noremap <F3> :Autoformat<CR><CR>
 
 
+""" easytags
+let g:easytags_async = 1
+let g:easytags_auto_highlight = 0
+
+
 """ ctrlp
 let g:ctrlp_map = '<leader>,'
 let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_working_path_mode = 'a'
+" let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_custom_ignore = {
      \ 'dir':  '_build$\|deps$\|\.git$\|\.hg$\|\.svn$\|log$\|_public$\|node_modules$\|bower_components$\|tmp$\|vendor/bundle$\|vendor/cache$\|coverage$\|vendor/mongodb$\|vendor/redis$',
      \ 'file': '\.swp$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
@@ -284,10 +298,6 @@ let g:ctrlp_show_hidden = 1
 let g:ctrlp_open_multiple_files = 'vjr'
 
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'mixed', 'line']"
-
-" ctrlp leaves stale caches behind if there is another vim process runnin
-" which didn't use ctrlp. so we clear all caches on each new vim invocation
-cal ctrlp#clra()
 
 " Use Ag over Grep
 if executable('ag')
@@ -367,7 +377,7 @@ let NERDTreeShowLineNumbers = 1
 let NERDTreeAutoCenter = 1
 
 " Open NERDTree on startup, when no file has been specified
-autocmd VimEnter * if !argc() | NERDTree | endif
+" autocmd VimEnter * if !argc() | NERDTree | endif
 
 " Toggle On/Off
 nnoremap <C-k><C-b> :NERDTreeToggle<CR>
@@ -391,6 +401,7 @@ let g:polyglot_disabled = ['css', 'javascript', 'html', 'javascript.jsx']
 
 
 """ delimitMate
+let delimitMate_excluded_ft = "html"
 let delimitMate_expand_cr = 1
 
 
