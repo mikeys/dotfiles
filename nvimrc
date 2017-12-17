@@ -5,7 +5,7 @@ call plug#begin('~/.vim/plugged')
 " Make sure you use single quotes
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'rking/ag.vim'
+" Plug 'rking/ag.vim'
 " Plug 'Numkil/ag.nvim'
 Plug 'Chiel92/vim-autoformat'
 Plug 'qpkorr/vim-bufkill'
@@ -26,11 +26,11 @@ Plug 'benekastah/neomake'
 
 " CTags
 Plug 'majutsushi/tagbar'
-Plug 'xolox/vim-misc' | Plug 'xolox/vim-easytags'
+" Plug 'xolox/vim-misc' | Plug 'xolox/vim-easytags'
 
-" CtrlP
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tacahiroy/ctrlp-funky'
+" fzf
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
 
 " Nerdtree
 Plug 'scrooloose/nerdtree'
@@ -77,6 +77,7 @@ Plug 'alvan/vim-closetag'
 Plug 'mattn/emmet-vim'
 Plug 'othree/html5.vim'
 Plug 'gregsexton/MatchTag'
+Plug 'skwp/vim-html-escape'
 
 " Handlebars
 Plug 'mustache/vim-mustache-handlebars'
@@ -245,14 +246,20 @@ map <Leader>bd :BD<CR>
 nnoremap <C-w>> :call SetWinAdjust('r', 10)<CR>
 nnoremap <C-w>< :call SetWinAdjust('l', 10)<CR>
 
+" Regenerate Tags
+map <Leader>rt :call RegenerateCTags()<CR>
+
 " Fast file saving
 map <Leader>w :w<CR>
 imap <Leader>w <ESC>:w<CR>
 vmap <Leader>w <ESC><ESC>:w<CR>
 
+" use CTRL-N like vim multiple cursors (select text under curosr and run cgn)
+" map <C-n> viwy/<C-R>"<CR>Ncgn
+" imap <C-n> <Esc>viwy/<C-R>"<CR>Ncgn
+
 " Remap VIM 0 to first non-blank character
 map 0 ^
-
 
 " Force Filetype
 " ===============
@@ -267,6 +274,9 @@ autocmd BufRead,BufNewFile .jsbeautifyrc setfiletype json
 """ vim-airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme =  'wombat'
+let g:airline#extensions#tabline#show_tabs = 0
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#show_tabs = 0
 let g:airline#extensions#tabline#enabled = 1
 
 
@@ -279,51 +289,62 @@ let g:easytags_async = 1
 let g:easytags_auto_highlight = 0
 
 
-""" ctrlp
-let g:ctrlp_map = '<leader>,'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'a'
+""" fzf
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
+
+" find files (a-la ctrl-p)
+nnoremap <silent> <expr> <leader>. (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+" find tags
+nnoremap <silent> <expr> <leader>tt (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Tags\<cr>"
+" find methods in current buffer
+nnoremap <silent> <expr> <leader>fu (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":BTags\<cr>"
+" find buffers
+nnoremap <silent> <expr> <leader>b (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Buffers\<cr>"
+
+" let g:ctrlp_map = '<leader>,'
+" let g:ctrlp_cmd = 'CtrlP'
+" let g:ctrlp_working_path_mode = 'a'
 " let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_custom_ignore = {
-     \ 'dir':  '_build$\|deps$\|\.git$\|\.hg$\|\.svn$\|log$\|_public$\|node_modules$\|bower_components$\|tmp$\|vendor/bundle$\|vendor/cache$\|coverage$\|vendor/mongodb$\|vendor/redis$',
-     \ 'file': '\.swp$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
-     \ }
-let g:ctrlp_clear_cache_on_exit = 1
-let g:ctrlp_max_height = 10
-let g:ctrlp_switch_buffer = 1 " jump to buffer in the same tab if already open
-let g:ctrlp_show_hidden = 1
+" let g:ctrlp_custom_ignore = {
+     " \ 'dir':  '_build$\|deps$\|\.git$\|\.hg$\|\.svn$\|log$\|_public$\|node_modules$\|bower_components$\|tmp$\|vendor/bundle$\|vendor/cache$\|coverage$\|vendor/mongodb$\|vendor/redis$',
+     " \ 'file': '\.swp$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
+     " \ }
+" let g:ctrlp_clear_cache_on_exit = 1
+" let g:ctrlp_max_height = 10
+" let g:ctrlp_switch_buffer = 1 " jump to buffer in the same tab if already open
+" let g:ctrlp_show_hidden = 1
 
 " open multiple files with <c-z> to mark and <c-o> to open. v - opening in
 " vertical splits; j - jump to first open buffer; r - open first in current buffer
-let g:ctrlp_open_multiple_files = 'vjr'
+" let g:ctrlp_open_multiple_files = 'vjr'
 
-let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'mixed', 'line']"
+" let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'mixed', 'line']"
 
 " Use Ag over Grep
-if executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor
+" if executable('ag')
+  " set grepprg=ag\ --nogroup\ --nocolor
 
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " let g:ctrlp_user_command = 'ag %s --ignore .git --ignore .gitkeep --hidden -l --nocolor -g  ""'
 
   " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-endif
+  " let g:ctrlp_use_caching = 0
+" endif
 
-nmap <leader>. :CtrlPClearCache<cr>:CtrlP<cr>
-nmap <leader>m :CtrlPBufTag<cr>
-nmap <leader>M :CtrlPBufTagAll<cr>
+" nmap <leader>. :CtrlPClearCache<cr>:CtrlP<cr>
+" nmap <leader>m :CtrlPBufTag<cr>
+" nmap <leader>M :CtrlPBufTagAll<cr>
 " nmap <leader>l :CtrlPLine<cr>
 " nmap <leader>b :CtrlPBuff<cr>
 
 
 """ ctrlp-funky
-let g:ctrlp_funky_syntax_highlight = 1  " syntax highlighting on funky matches
-let g:ctrlp_funky_matchtype = 'path'  " matched chars highlighting
+" let g:ctrlp_funky_syntax_highlight = 1  " syntax highlighting on funky matches
+" let g:ctrlp_funky_matchtype = 'path'  " matched chars highlighting
 
-noremap <Leader>fu :CtrlPFunky<Cr>
+" noremap <Leader>fu :CtrlPFunky<Cr>
 " narrow the list down with a word under cursor
-nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>nn
+" nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>nn
 
 
 """ vim-go
@@ -355,6 +376,8 @@ au FileType go nmap <leader>c <Plug>(go-coverage)
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
+let g:go_metalinter_enabled = []
+let g:go_metalinter_autosave_enabled = []
 
 
 """ deoplete-go
@@ -418,6 +441,30 @@ let g:neomake_error_sign = {
       \ }
 
 let g:neomake_javascript_enabled_makers = ['eslint']
+let g:neomake_ruby_enabled_makers = []
+let g:neomake_go_enabled_makers = [ 'go', 'gometalinter' ]
+let g:neomake_go_gometalinter_maker = {
+  \ 'args': [
+  \   '--tests',
+  \   '--enable-gc',
+  \   '--concurrency=3',
+  \   '--fast',
+  \   '-D', 'aligncheck',
+  \   '-D', 'dupl',
+  \   '-D', 'gocyclo',
+  \   '-D', 'gotype',
+  \   '-E', 'errcheck',
+  \   '-E', 'misspell',
+  \   '-E', 'unused',
+  \   '%:p:h',
+  \ ],
+  \ 'append_file': 0,
+  \ 'errorformat':
+  \   '%E%f:%l:%c:%trror: %m,' .
+  \   '%W%f:%l:%c:%tarning: %m,' .
+  \   '%E%f:%l::%trror: %m,' .
+  \   '%W%f:%l::%tarning: %m'
+  \ }
 
 if exists('g:plugs["neomake"]')
   if has('autocmd')
@@ -466,7 +513,7 @@ set omnifunc=syntaxcomplete#Complete
 let g:deoplete#enable_at_startup = 1
 
 let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.html = '<[^>]*'
+" let g:deoplete#omni#input_patterns.html = '<[^>]*'
 let g:deoplete#omni#input_patterns.css = '^\s+\w+|\w+[):;](\s+)?|[@!]'
 let g:deoplete#omni#input_patterns.scss = '^\s+\w+|\w+[):;](\s+)?|[@!]'
 
@@ -483,7 +530,7 @@ let g:acp_enableAtStartup = 0
 
 " Enable omni completion.
 autocmd FileType javascript,javascript.jsx setlocal omnifunc=tern#Complete
-autocmd FileType html,html.handlebars,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+" autocmd FileType html,html.handlebars,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
 autocmd FileType css,scss set iskeyword=@,48-57,_,-,?,!,192-255
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
@@ -609,3 +656,108 @@ fun! SetWinAdjust(direction, interval)
 
   execute 'vertical resize ' . resize_by
 endfun
+
+
+" Ruby rules fix based on rubocop
+function! RubFix(aggressive,args)
+  let args = split(a:args,' ')
+  if (!empty(getbufvar(winbufnr('%'), "&bt")))
+    echo 'not a file buffer'
+    return 'not a file buffer'
+  endif
+  let cmd = 'rubocop -a'
+  if a:aggressive!='!'
+    if empty(args)
+      let styles  = ["Style/LeadingCommentSpace","Style/SpaceAfterColon","Style/SpaceAfterComma","Style/SpaceAfterMethodName","Style/SpaceAroundBlockParameters",
+            \ "Style/SpaceAroundEqualsInParameterDefault","Style/SpaceAroundKeyword","Style/SpaceAroundOperators","Style/SpaceBeforeBlockBraces",
+            \ "Style/SpaceBeforeComma","Style/SpaceBeforeComment","Style/SpaceBeforeFirstArg","Style/SpaceBeforeSemicolon","Style/SpaceInsideBlockBraces",
+            \ "Style/SpaceInsideBrackets","Style/SpaceInsideHashLiteralBraces","Style/SpaceInsideParens","Style/SpaceInsidePercentLiteralDelimiters",
+            \ "Style/SpaceInsideRangeLiteral","Style/EmptyLineAfterMagicComment","Style/EmptyLineBetweenDefs","Style/EmptyLines",
+            \ "Style/EmptyLinesAroundAccessModifier","Style/EmptyLinesAroundBlockBody","Style/EmptyLinesAroundClassBody","Style/EmptyLinesAroundExceptionHandlingKeywords",
+            \ "Style/EmptyLinesAroundMethodBody","Style/EmptyLinesAroundModuleBody", "Style/TrailingCommaInLiteral", "Style/TrailingCommaInArguments",
+            \ "Style/TrailingUnderscoreVariable", "Style/TrailingWhitespace" , "Style/TrailingBlankLines", "Style/ExtraSpacing"
+            \ ]
+    else
+      let styles = []
+      for command in args
+        if command=='setup' || command=='init'
+          let rubocop_files_count = system('ls -l .rubocop.yml | wc -l')
+          if rubocop_files_count =~ '\w*0\w*'
+            call system('echo "\nAllCops:\n  DisplayCopNames: true\n" > .rubocop.yml')
+          else
+            let rubocop_content = system('cat .rubocop.yml')
+            if rubocop_content !~ '\w*DisplayCopNames:\w*'
+              call system('echo "\nAllCops:\n  DisplayCopNames: true\n" >> .rubocop.yml')
+            else
+              echo 'rubocop.yml already contains init rules'
+            endif
+          end
+          return
+        elseif command=='ignore' || command=='add'
+          let line_errors = s:rubocop_line_errors()
+          if !empty(line_errors) 
+            for err in line_errors
+              let rubocop_rule = split(err['text'],':')[0]
+              if rubocop_rule =~ '^Style\/'
+                call system('echo "\n'.rubocop_rule.':\n  Enabled: false\n" >> .rubocop.yml')
+                echo "Style rule added to .rubocop.yml"
+              elseif rubocop_rule =~ '^Lint\/'
+                call system('echo "\n'.rubocop_rule.':\n  Enabled: false\n" >> .rubocop.yml')
+                echo "Lint rule added to .rubocop.yml"
+              elseif rubocop_rule =~ '^Metrics\/'
+                "let rule_value = matchstr(err['text'], '\[[0-9]\+')
+                call system('echo "\n'.rubocop_rule.':\n  Enabled: false\n" >> .rubocop.yml')
+                echo "Metric rule added to .rubocop.yml"
+              else
+                echo "don't know how to parse the rule"
+              end
+            endfor
+          endif
+          execute 'w'
+          return
+        end
+        if command=='error' || command=='err' || command=='this' || command=='current' " get current line errors
+          let line_errors = s:rubocop_line_errors()
+          if !empty(line_errors) 
+            for err in line_errors
+              let rubocop_rule = split(err['text'],':')[0]
+              call add(styles,rubocop_rule)
+            endfor
+          endif
+        else
+          call add(styles,command)
+        end
+      endfor
+    endif
+    if empty(styles)
+      echo "didn't find rubucop errors on current line"
+      return 
+    endif
+    let cmd = cmd.' --only '.join(styles,',')
+  endif
+
+  let cmd = cmd.' '.expand('%:pj')
+  execute 'w'
+  " echo cmd
+  let resp = system(cmd)
+  " echo resp
+  edit!
+  execute 'w'
+endfunction
+command! -bang -nargs=* RubFix call RubFix('<bang>', <q-args>)
+function! JsonFormat()
+ execute '%!python -m json.tool'
+endfunction
+command! JsonFormat call JsonFormat() 
+
+function! RegenerateCTags()
+  if !exists("g:ctags_regenerate_args")
+    let g:ctags_regenerate_args = ''
+  endif
+
+  let cmd = 'ctags --exclude=log --exclude=tmp --exclude=node_modules '. g:ctags_regenerate_args.' --exclude=.\* --extra=+f -R * '
+  echo cmd
+  let resp = system(cmd)
+  echo resp
+  echo "DONE !"
+endfunction

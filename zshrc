@@ -72,7 +72,11 @@ export NVM_DIR=$HOME/.nvm
 source $(brew --prefix nvm)/nvm.sh --no-use
 
 # gvm
-[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+# [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+export GOPATH=${HOME}/dev/go
+export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
+export GOROOT=$(brew --prefix)/Cellar/go/${GOVERSION}/libexec
+export PATH=${GOPATH}/bin:$PATH
 
 # rvm
 export PATH="$PATH:$HOME/.rvm/bin"
@@ -86,6 +90,9 @@ export PIP_REQUIRE_VIRTUALENV=false
 
 # pip cache packages to avoid re-downloading
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
+
+# php
+export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
 
 # docker
 # eval "$(docker-machine env default)"
@@ -109,6 +116,9 @@ alias ctags="$(brew --prefix)/bin/ctags"
 alias dev='cd $DEVDIR'
 alias dockerclean='docker rm -v $(docker ps -a -q -f status=exited)'
 alias vim='nvim'
+alias ag="ag --path-to-agignore $HOME/dotfiles/agignore"
 
 # Load private configurations
 source "$HOME/.zshrc.local"
+
+export PATH="$HOME/.yarn/bin:$PATH"
