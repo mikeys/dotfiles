@@ -25,6 +25,7 @@ antigen bundle rvm
 antigen bundle unixorn/docker-helpers.zshplugin
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle lukechilds/zsh-better-npm-completion
 
 # Custom theme
 antigen theme $HOME/dotfiles/ steeef_custom.zsh-theme
@@ -52,7 +53,7 @@ if [ "$TERM" = "xterm" ]; then
 fi
 
 # the most annoying environment variable ever
-export PATH=$PATH:/usr/local/bin:/usr/local/opt:/usr/bin:/bin:/usr/sbin:/sbin
+export PATH=$PATH:/usr/local/bin:/usr/local/opt:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
 
 export DEVDIR=$HOME/Development
 
@@ -92,7 +93,7 @@ export PIP_REQUIRE_VIRTUALENV=false
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 
 # php
-export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
+# export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
 
 # docker
 # eval "$(docker-machine env default)"
@@ -108,7 +109,6 @@ export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
 
 # awscli completions
 source '/usr/local/share/zsh/site-functions/_aws'
-
 
 # Aliases
 # =======

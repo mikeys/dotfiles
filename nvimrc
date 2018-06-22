@@ -59,6 +59,7 @@ Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-rake'
 Plug 'vim-ruby/vim-ruby'
+Plug 'ruby-formatter/rufo-vim'
 
 " JavaScript
 Plug 'pangloss/vim-javascript'
@@ -261,6 +262,11 @@ vmap <Leader>w <ESC><ESC>:w<CR>
 " Remap VIM 0 to first non-blank character
 map 0 ^
 
+" Ctrl-F for Ag
+imap <C-f> <Esc>viwy<Esc>:Ag<Space><C-r>"
+map <C-f> <Esc>viwy:Ag<space><C-r>"
+vmap <C-f> y<Esc>:Ag<space><C-r>"
+
 " Force Filetype
 " ===============
 autocmd BufRead,BufNewFile .eslintrc setfiletype json
@@ -427,6 +433,9 @@ let g:polyglot_disabled = ['css', 'javascript', 'html', 'javascript.jsx']
 let delimitMate_excluded_ft = "html"
 let delimitMate_expand_cr = 1
 
+
+" Rufo
+let g:rufo_auto_formatting = 0
 
 """ Neomake
 let g:neomake_open_list=2
@@ -657,7 +666,6 @@ fun! SetWinAdjust(direction, interval)
   execute 'vertical resize ' . resize_by
 endfun
 
-
 " Ruby rules fix based on rubocop
 function! RubFix(aggressive,args)
   let args = split(a:args,' ')
@@ -750,6 +758,7 @@ function! JsonFormat()
 endfunction
 command! JsonFormat call JsonFormat() 
 
+" Regenerate CTags
 function! RegenerateCTags()
   if !exists("g:ctags_regenerate_args")
     let g:ctags_regenerate_args = ''
@@ -761,3 +770,59 @@ function! RegenerateCTags()
   echo resp
   echo "DONE !"
 endfunction
+
+function! s:tags_sink(line)
+  let parts = split(a:line, '\t\zs')
+  let excmd = matchstr(parts[2:], '^.*\ze;"\t')
+  execute 'silent e' parts[1][:-2]
+  let [magic, &magic] = [&magic, 0]
+  execute excmd
+  let &magic = magic
+endfunction
+
+" FzF support for search by CTags
+function! FzfTags(term)
+  if empty(tagfiles())
+    echohl WarningMsg
+    echom 'Preparing tags'
+    echohl None
+    call system('ctags -R')
+  endif
+
+  let trim_tags_cmd = 'cat '.join(map(tagfiles(), 'fnamemodify(v:val, ":S")')). '| ag "^'.a:term.'\t+"'
+  let tags = split(system(trim_tags_cmd),"\n")
+  let tags_count = len(tags)
+  if tags_count==0
+    echo "No matches found for term '".a:term."'"
+    return
+  elseif tags_count==1
+    execute "tag " .a:term
+  else
+    "\ 'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index --prompt "Tags>'.a:term. '"',
+    call fzf#run({
+    \ 'source':  tags,
+    \ 'options': '+m -d "\t" --tiebreak=index --with-nth 1,2,4.. --select-1',
+    \ 'down':    '20%',
+    \ 'sink':    function('s:tags_sink')})
+  end
+endfunction
+
+nnoremap <C-]> :call FzfTags(expand('<cword>'))<CR>
+if &diff
+    colorscheme evening
+endif
+
+" Paste over without overwriting register
+function! RestoreRegister()
+  " Restore the contents of the clipboard register
+  let @* = s:restore_reg
+  return ''
+endfunction
+
+function! s:Repl()
+  " Save contents of the clipboard register
+  let s:restore_reg = @*
+  return "p@=RestoreRegister()\<cr>"
+endfunction
+
+vnoremap <silent> <expr> p <sid>Repl()
