@@ -1,15 +1,30 @@
 # brew
-ansible                         git                             mcrypt                          python
-autoconf                        gnupg                           mhash                           python3
-automake                        gotags                          mysql                           readline
-awscli                          hub                             neovim                          reattach-to-user-namespace
-ccat                            kibana                          node                            redis
-cmake                           libevent                        nvm                             sqlite
-ctags                           libgpg-error                    openssl                         the_silver_searcher
-elasticsearch17                 libksba                         pcre                            tmux
-gawk                            libtool                         phantomjs                       vim
-gdbm                            libyaml                         pkg-config                      xz
-gettext                         lua                             postgresql
+akamai                          go                              libvterm                        python@2
+antigen                         gotags                          libxml2                         qpdf
+autoconf                        gpm                             libyaml                         readline
+automake                        hub                             luajit                          reattach-to-user-namespace
+aws-elasticbeanstalk            icu4c                           maven                           ruby
+awscli                          imagemagick                     md5sha1sum                      s3cmd
+ccat                            imagemagick@6                   mhash                           sbt
+chromedriver                    isl                             mpfr                            scala
+cloog                           isl@0.12                        mpfr@2                          sphinx-doc
+cmake                           jemalloc                        msgpack                         sqlite
+composer                        jpeg                            mysql                           the_silver_searcher
+coreutils                       libevent                        neovim                          tmux
+ctags                           libgpg-error                    node                            unibilium
+dep                             libidn2                         nvm                             universal-ctags
+freetype                        libksba                         openssl                         unixodbc
+fzf                             libmpc@0.8                      pcre                            v8
+gawk                            libpng                          perl                            varnish
+gdbm                            libtermkey                      php56                           vim
+gettext                         libtiff                         php@5.6                         wget
+git                             libtool                         pkg-config                      xz
+gmp                             libunistring                    python                          yarn
+gmp@4                           libuv                           python3                         zlib
 
 # brew cask
-filezilla   firefox     iterm2      java        licecap     sequel-pro  skitch      slack       teamviewer
+atom              iterm2            spotify           vagrant
+beyond-compare    java              sublime-text      virtualbox
+firefox           sequel-pro        teamviewer
+gimp              skitch            telegram-desktop
+intellij-idea-ce  skype             tunnelbear
