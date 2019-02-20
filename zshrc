@@ -1,48 +1,22 @@
 # Antigen
 # =======
 
-source $(brew --prefix)/share/antigen/antigen.zsh
+source /usr/local/share/antigen/antigen.zsh
+
 antigen use oh-my-zsh
-
-# Bundles from the default repo (robbyrussell's oh-my-zsh)
-antigen bundle brew
-antigen bundle brew-cask
-antigen bundle bundler
-antigen bundle docker
-antigen bundle docker-compose
-antigen bundle heroku
 antigen bundle git
-antigen bundle node
-antigen bundle npm
-antigen bundle nvm
-antigen bundle gem
-antigen bundle osx
-antigen bundle rails
-antigen bundle ruby
-antigen bundle rvm
 
-# Bundles from non-default repos
-antigen bundle unixorn/docker-helpers.zshplugin
+antigen bundle mafredri/zsh-async
+antigen bundle rupa/z
 antigen bundle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-autosuggestions
+
+# These should be last
+antigen bundle sindresorhus/pure
 antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle lukechilds/zsh-better-npm-completion
+antigen bundle zsh-users/zsh-history-substring-search
 
-# Custom theme
-antigen theme $HOME/dotfiles/ steeef_custom.zsh-theme
-
-# Tell antigen that you're done.
 antigen apply
-
-# export ZSH=$HOME/.oh-my-zsh
-
-# ZSH_THEME="steeef_custom"
-
-# plugins=(brew bundler docker docker-compose heroku git npm node gem osx rails)
-# plugins+=(ruby rvm zsh-completions zsh-syntax-highlighting)
-# autoload -U compinit && compinit
-
-# source $ZSH/oh-my-zsh.sh
-
 
 # User configuration
 # ==================
@@ -66,13 +40,13 @@ export HISTSIZE=100000
 export HISTFILE=$HOME/.history
 export SAVEHIST=$HISTSIZE # This will save history for next sessions
 
-export EDITOR=nvim
+export EDITOR=code
 
 # nvm
 export NVM_DIR=$HOME/.nvm
 source $(brew --prefix nvm)/nvm.sh --no-use
 
-# gvm
+# golang
 # [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 export GOPATH=${HOME}/dev/go
 export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
@@ -115,10 +89,10 @@ source '/usr/local/share/zsh/site-functions/_aws'
 alias ctags="$(brew --prefix)/bin/ctags"
 alias dev='cd $DEVDIR'
 alias dockerclean='docker rm -v $(docker ps -a -q -f status=exited)'
-alias vim='nvim'
 alias ag="ag --path-to-agignore $HOME/dotfiles/agignore"
 
 # Load private configurations
 source "$HOME/.zshrc.local"
 
 export PATH="$HOME/.yarn/bin:$PATH"
+export PATH="/usr/local/opt/qt/bin:$PATH"
